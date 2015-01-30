@@ -1,12 +1,10 @@
 package com.example.guessmusic.myui;
 
 import java.util.ArrayList;
-
 import com.example.guessmusic.R;
 import com.example.guessmusic.model.IWordButtonClickListener;
 import com.example.guessmusic.model.WordButton;
 import com.example.guessmusic.util.Util;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
@@ -79,7 +77,7 @@ public class MyGridView extends GridView {
 				//加载动画
 				mScaleAnimation = AnimationUtils.loadAnimation(mContext, R.anim.scale);
 				//设置动画的延迟时间
-				mScaleAnimation.setStartOffset(pos * 120);
+				mScaleAnimation.setStartOffset(pos * 50);
 				
 				holder.setIndex(pos);
 				holder.setViewButton((Button)v.findViewById(R.id.item_btn));
