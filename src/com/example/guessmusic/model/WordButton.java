@@ -21,12 +21,12 @@ public class WordButton {
 		mWordString = "";
 	}
 
-	public int getmIndex() {
+	public int getIndex() {
 		return mIndex;
 	}
 
-	public void setmIndex(int mIndex) {
-		this.mIndex = mIndex;
+	public void setIndex(int index) {
+		this.mIndex = index;
 	}
 
 	public boolean isIsVisiable() {

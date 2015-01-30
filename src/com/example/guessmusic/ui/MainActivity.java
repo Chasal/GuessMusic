@@ -1,8 +1,8 @@
 package com.example.guessmusic.ui;
 
 import java.util.ArrayList;
-
 import com.example.guessmusic.R;
+import com.example.guessmusic.model.IWordButtonClickListener;
 import com.example.guessmusic.model.WordButton;
 import com.example.guessmusic.myui.MyGridView;
 import com.example.guessmusic.util.Util;
@@ -27,7 +27,8 @@ import android.widget.Toast;
  * 
  * @author Administrator
  */
-public class MainActivity extends Activity {
+public class MainActivity extends Activity 
+						implements IWordButtonClickListener{
 
 	// 唱片相关动画
 	private Animation mPanAnim;
@@ -69,6 +70,9 @@ public class MainActivity extends Activity {
 		mBtnPlayStart = (ImageButton) findViewById(R.id.btn_play_start);
 
 		mMyGridView = (MyGridView) findViewById(R.id.gridView);
+		//注册监听
+		mMyGridView.registOnWordButtonClick(this);
+		
 		mViewWordsContainer = (LinearLayout) findViewById(R.id.word_select_container);
 
 		// 初始化动画
@@ -229,5 +233,11 @@ public class MainActivity extends Activity {
 		}
 
 		return data;
+	}
+	
+	
+	@Override
+	public void onWordButtonClick(WordButton wordButton) {
+		Toast.makeText(this, wordButton.getIndex() + "", Toast.LENGTH_SHORT).show();
 	}
 }

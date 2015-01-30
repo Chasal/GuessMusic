@@ -3,6 +3,7 @@ package com.example.guessmusic.myui;
 import java.util.ArrayList;
 
 import com.example.guessmusic.R;
+import com.example.guessmusic.model.IWordButtonClickListener;
 import com.example.guessmusic.model.WordButton;
 import com.example.guessmusic.util.Util;
 
@@ -10,6 +11,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
@@ -30,7 +33,9 @@ public class MyGridView extends GridView {
 	//适配器
 	private MyGridAdapter mAdapter;
 	
+	private IWordButtonClickListener mWordClickListener;
 	
+	private Animation mScaleAnimation;
 	public MyGridView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		mContext = context;
@@ -65,21 +70,48 @@ public class MyGridView extends GridView {
 
 		@Override
 		public View getView(int pos, View v, ViewGroup p) {
-			WordButton holder;
+			final WordButton holder;
 			
 			if(v == null){
 				v = Util.getView(mContext,R.layout.self_ui_gridview_item);
 				holder = mArrayList.get(pos);
+				
+				//加载动画
+				mScaleAnimation = AnimationUtils.loadAnimation(mContext, R.anim.scale);
+				//设置动画的延迟时间
+				mScaleAnimation.setStartOffset(pos * 120);
+				
+				holder.setIndex(pos);
 				holder.setViewButton((Button)v.findViewById(R.id.item_btn));
+				
+				holder.getViewButton().setOnClickListener(new View.OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						mWordClickListener.onWordButtonClick(holder);
+					}
+				});
+				
 				v.setTag(holder);
 			}else {
 				holder = (WordButton) v.getTag();
 			}
 			
 			holder.getViewButton().setText(holder.getWordString());
+			
+			//播放动画
+			v.startAnimation(mScaleAnimation);
 			return v;
 		}
 		
+	}
+	
+	/**
+	 * 注册监听接口
+	 * @param clickListener
+	 */
+	public void registOnWordButtonClick(IWordButtonClickListener clickListener){
+		mWordClickListener = clickListener;
 	}
 
 }
