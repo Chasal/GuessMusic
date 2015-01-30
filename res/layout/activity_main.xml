@@ -11,4 +11,6 @@
     <!-- 盘面 -->
 	<include layout="@layout/pan_layout"/>
 	
+	<!--  -->
+	<include layout="@layout/name_select"/>
 </LinearLayout>
