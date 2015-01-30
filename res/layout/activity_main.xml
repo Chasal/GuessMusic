@@ -6,7 +6,9 @@
     android:orientation="vertical" >
 
     <!-- Top bar -->
-
     <include layout="@layout/top_bar" />
-
+    
+    <!-- 盘面 -->
+	<include layout="@layout/pan_layout"/>
+	
 </LinearLayout>
