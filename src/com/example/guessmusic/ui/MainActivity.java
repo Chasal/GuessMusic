@@ -195,7 +195,11 @@ public class MainActivity extends Activity
 		mViewPan.clearAnimation();
 	}
 
-	//加载歌曲，获取歌曲信息
+	/**
+	 * 加载歌曲，获取歌曲信息
+	 * @param stageIndex   歌曲索引
+	 * @return
+	 */
 	private Song loadStageSongInfo(int stageIndex){
 		Song song = new Song();
 		String[] stage = Const.SONG_INFO[stageIndex];
@@ -204,7 +208,9 @@ public class MainActivity extends Activity
 		return song;
 	}
 	
-	// 初始化游戏数据
+	/**
+	 *  初始化游戏数据
+	 */
 	private void initCurrentStageData() {
 		//读取当前关卡的歌曲信息
 		mCurretSong  = loadStageSongInfo(++mCurrentStageIndex);
@@ -226,7 +232,12 @@ public class MainActivity extends Activity
 		mMyGridView.updateData(mAllWords);
 	}
 
-	// 初始化待选择文字框
+	
+	
+	/**
+	 * 初始化待选择文字框
+	 * @return
+	 */
 	private ArrayList<WordButton> initAllWord() {
 
 		ArrayList<WordButton> data = new ArrayList<WordButton>();
@@ -272,7 +283,10 @@ public class MainActivity extends Activity
 		return words;
 	}
 
-	// 初始化以选择文本框
+	/**
+	 * 初始化以选择文本框
+	 * @return
+	 */
 	private ArrayList<WordButton> initWordSelect() {
 		ArrayList<WordButton> data = new ArrayList<WordButton>();
 		
@@ -281,28 +295,82 @@ public class MainActivity extends Activity
 			View view = Util.getView(MainActivity.this,
 					R.layout.self_ui_gridview_item);
 			
-			WordButton holder = new WordButton();
+			final WordButton holder = new WordButton();
 			holder.setViewButton((Button) view.findViewById(R.id.item_btn));
 			holder.getViewButton().setTextColor(Color.WHITE);
 			holder.getViewButton().setText("");
 			holder.setIsVisiable(false);
-
 			holder.getViewButton().setBackgroundResource(
 					R.drawable.game_wordblank);
+			
+			holder.getViewButton().setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					clearTheAnswer(holder);
+				}
+			});
+			
 			data.add(holder);
 		}
 
 		return data;
 	}
 	
-	
 	@Override
 	public void onWordButtonClick(WordButton wordButton) {
 		Toast.makeText(this, wordButton.getIndex() + "", Toast.LENGTH_SHORT).show();
+		setSelectWord(wordButton);
 	}
 	
 	/**
+	 * 设置答案
+	 * @param wordButton
+	 */
+	private void setSelectWord(WordButton wordButton){
+		for(int i = 0 ; i < mBtnSelectWords.size();i++){
+			
+			if(mBtnSelectWords.get(i).getWordString().length() == 0){
+				//设置答案文字框内容及可见性
+				mBtnSelectWords.get(i).getViewButton().setText(wordButton.getWordString());
+				mBtnSelectWords.get(i).setIsVisiable(true);
+				mBtnSelectWords.get(i).setWordString(wordButton.getWordString());
+				//记录索引
+				mBtnSelectWords.get(i).setIndex(wordButton.getIndex());
+				
+				//设置待选框的可见性
+				setButtonVisiable(wordButton,View.INVISIBLE);
+				break;
+			}
+		}
+	}
+	
+	
+	/**
+	 * 清除答案
+	 */
+	private void clearTheAnswer(WordButton wordButton){
+		wordButton.getViewButton().setText("");
+		wordButton.setWordString("");
+		wordButton.setIsVisiable(false);
+		
+		//设置待选文本框的可见性
+		setButtonVisiable(mAllWords.get(wordButton.getIndex()), View.VISIBLE);
+	}
+	
+	
+	/**
+	 * 设置待选文本框是否可见
+	 */
+	private void setButtonVisiable(WordButton wordButton,int visibility){
+		
+		wordButton.getViewButton().setVisibility(visibility);
+		wordButton.setIsVisiable((visibility == View.VISIBLE) ? true : false);
+		
+	}
+	/**
 	 * 生成随机汉字
+	 * http://www.cnblogs.com/skyivben/archive/2012/10/20/2732484.html
 	 * @return
 	 */
 	private char getRandomChar(){
