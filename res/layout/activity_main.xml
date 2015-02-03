@@ -1,16 +1,30 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/index_background"
-    android:gravity="center_horizontal"
-    android:orientation="vertical" >
-
-    <!-- Top bar -->
-    <include layout="@layout/top_bar" />
-    
-    <!-- 盘面 -->
-	<include layout="@layout/pan_layout"/>
+    android:layout_height="match_parent" >
 	
-	<!-- 文字框-->
-	<include layout="@layout/name_select"/>
-</LinearLayout>
+    <!-- Frame1 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/index_background"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
+
+        <!-- Top bar -->
+
+        <include layout="@layout/top_bar" />
+
+        <!-- 盘面 -->
+
+        <include layout="@layout/pan_layout" />
+
+        <!-- 文字框 -->
+
+        <include layout="@layout/name_select" />
+    </LinearLayout>
+    
+     <!-- Frame2 ,答案正確界面-->
+     <include layout="@layout/answer_right"/>
+     
+
+</FrameLayout>

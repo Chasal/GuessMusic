@@ -16,7 +16,7 @@ import android.widget.Button;
 import android.widget.GridView;
 
 /**
- * 创建网格布局，用于显示待选汉子
+ * 创建网格布局，用于显示待选汉字
  * @author Administrator
  *
  */
