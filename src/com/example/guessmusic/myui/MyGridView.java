@@ -80,15 +80,18 @@ public class MyGridView extends GridView {
 				mScaleAnimation.setStartOffset(pos * 50);
 				
 				holder.setIndex(pos);
-				holder.setViewButton((Button)v.findViewById(R.id.item_btn));
 				
-				holder.getViewButton().setOnClickListener(new View.OnClickListener() {
+				if(holder.getViewButton() == null){
+					holder.setViewButton((Button)v.findViewById(R.id.item_btn));
 					
-					@Override
-					public void onClick(View v) {
-						mWordClickListener.onWordButtonClick(holder);
-					}
-				});
+					holder.getViewButton().setOnClickListener(new View.OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							mWordClickListener.onWordButtonClick(holder);
+						}
+					});
+				}
 				
 				v.setTag(holder);
 			}else {
