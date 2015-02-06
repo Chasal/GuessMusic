@@ -92,6 +92,18 @@ public class MainActivity extends Activity implements IWordButtonClickListener {
 	 * 拨杆控件
 	 */
 	private ImageView mViewPanBar;
+	
+	/**
+	 * 当前关的索引
+	 */
+	private TextView mCurrentStagePassView;
+	
+	private TextView mCurrentStageView;
+	
+	/**
+	 * 当前的歌曲名称
+	 */
+	private TextView mCurrentSongNamePassView;
 
 	/**
 	 * Play按键事件
@@ -289,14 +301,23 @@ public class MainActivity extends Activity implements IWordButtonClickListener {
 
 		// 初始化已选择框
 		mBtnSelectWords = initWordSelect();
-
+		
+		//清空原来的答案
+		mViewWordsContainer.removeAllViews();
+		
 		LayoutParams params = new LayoutParams(140, 140);
 		for (int i = 0; i < mBtnSelectWords.size(); i++) {
 			mViewWordsContainer.addView(mBtnSelectWords.get(i).getViewButton(),
 					params);
 
 		}
-
+		
+		//显示当前关的索引
+		mCurrentStageView = (TextView) findViewById(R.id.text_current_stage);
+		if(mCurrentStageView != null){
+			mCurrentStageView.setText((mCurrentStageIndex + 1) + "");
+		}
+		
 		// 获得数据
 		mAllWords = initAllWord();
 		// 更新数据
@@ -557,6 +578,47 @@ public class MainActivity extends Activity implements IWordButtonClickListener {
 	private void handlePassEvent() {
 		mPassView = (LinearLayout) this.findViewById(R.id.pass_view);
 		mPassView.setVisibility(View.VISIBLE);
+		
+		//停止未完成的动画
+		mViewPan.clearAnimation();
+		
+		//显示当前关的索引
+		mCurrentStagePassView = (TextView) findViewById(R.id.text_current_stage_pass);
+		if(mCurrentStagePassView != null){
+			mCurrentStagePassView.setText((mCurrentStageIndex + 1) + "");
+		}
+		
+		//显示当前关的索引
+		mCurrentSongNamePassView = (TextView) findViewById(R.id.text_current_song_name_pass);
+		if(mCurrentSongNamePassView != null){
+			mCurrentSongNamePassView.setText(mCurretSong.getSongName());
+		}
+		
+		//下一关按键处理
+		ImageButton btnPass = (ImageButton) findViewById(R.id.btn_next);
+		btnPass.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				//判断是否通关
+				if(judeAppPassed()){
+					//进入通关界面
+					Util.startActivity(MainActivity.this, AllPassView.class);
+				}else{
+					//开始新一关
+					mPassView.setVisibility(View.GONE);
+					//加载关卡数据
+					initCurrentStageData();
+				}
+			}
+		});
+	}
+	
+	/**
+	 * 判断是否通关
+	 */
+	private boolean judeAppPassed(){
+		return (mCurrentStageIndex == Const.SONG_INFO.length - 1);
 	}
 	
 	/**
@@ -592,6 +654,13 @@ public class MainActivity extends Activity implements IWordButtonClickListener {
 	 */
 	private void tipAnswer() {
 		boolean tipWord = false;
+		
+		//减少金币的数量
+		if(!handleCoins(-getTipWordCoins())){
+			//金币数量不够，显示对话框
+			return ;
+		}
+		
 		for(int i = 0 ; i < mBtnSelectWords.size();i++){
 			if(mBtnSelectWords.get(i).getWordString().length() == 0){
 				//根据当前的答案框条件选择对应的文字并填入
@@ -599,11 +668,6 @@ public class MainActivity extends Activity implements IWordButtonClickListener {
 				
 				tipWord = true;
 				
-				//减少金币的数量
-				if(!handleCoins(-getTipWordCoins())){
-					//金币数量不够，显示对话框
-					return ;
-				}
 				break;
 			}
 		}
