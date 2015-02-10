@@ -71,7 +71,11 @@ public class MainActivity extends Activity implements IWordButtonClickListener {
 	 */
 	private int mCurrentCoins = Const.TOTAL_COINS;
 	
-
+	/**
+	 * 过关界面的总金币
+	 */
+	private TextView mViewTxtMainCoins;
+	
 	/**
 	 * 金币View
 	 */
@@ -166,8 +170,6 @@ public class MainActivity extends Activity implements IWordButtonClickListener {
 		mViewPanBar = (ImageView) findViewById(R.id.imageView2);
 		mBtnPlayStart = (ImageButton) findViewById(R.id.btn_play_start);
 
-		mViewCurrentCoins = (TextView) findViewById(R.id.text_bar_coins);
-		mViewCurrentCoins.setText(mCurrentCoins + "");
 
 		mMyGridView = (MyGridView) findViewById(R.id.gridView);
 		// 注册监听
@@ -344,7 +346,12 @@ public class MainActivity extends Activity implements IWordButtonClickListener {
 			mCurrentStageView.setText((mCurrentStageIndex + 1) + "");
 		}
 		
-
+		// 显示当前关的金币
+		mViewCurrentCoins = (TextView) findViewById(R.id.text_bar_coins);
+		if(mViewCurrentCoins != null){
+			mViewCurrentCoins.setText((mCurrentCoins + 3) + "");
+		}
+		
 		// 获得数据
 		mAllWords = initAllWord();
 		// 更新数据
@@ -633,6 +640,13 @@ public class MainActivity extends Activity implements IWordButtonClickListener {
 		mCurrentSongNamePassView = (TextView) findViewById(R.id.text_current_song_name_pass);
 		if (mCurrentSongNamePassView != null) {
 			mCurrentSongNamePassView.setText(mCurretSong.getSongName());
+		}
+		
+		
+		//显示总金币
+		mViewTxtMainCoins = (TextView) findViewById(R.id.txt_main_coins);
+		if(mViewTxtMainCoins != null){
+			mViewTxtMainCoins.setText((mCurrentCoins + 3) + "");
 		}
 		
 		// 下一关按键处理
