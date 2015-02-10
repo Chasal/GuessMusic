@@ -30,6 +30,7 @@ import com.example.guessmusic.model.IWordButtonClickListener;
 import com.example.guessmusic.model.Song;
 import com.example.guessmusic.model.WordButton;
 import com.example.guessmusic.myui.MyGridView;
+import com.example.guessmusic.util.MyPlayer;
 import com.example.guessmusic.util.Util;
 
 /**
@@ -69,6 +70,7 @@ public class MainActivity extends Activity implements IWordButtonClickListener {
 	 * 当前金币数量
 	 */
 	private int mCurrentCoins = Const.TOTAL_COINS;
+	
 
 	/**
 	 * 金币View
@@ -105,7 +107,7 @@ public class MainActivity extends Activity implements IWordButtonClickListener {
 	private TextView mCurrentStagePassView;
 
 	private TextView mCurrentStageView;
-
+	
 	/**
 	 * 当前的歌曲名称
 	 */
@@ -260,6 +262,7 @@ public class MainActivity extends Activity implements IWordButtonClickListener {
 
 		// 处理提示按键事件
 		handleTipWord();
+		
 	}
 
 	/**
@@ -272,6 +275,9 @@ public class MainActivity extends Activity implements IWordButtonClickListener {
 				// 开始拨杆进入动画
 				mViewPanBar.startAnimation(mBarInAnim);
 				mBtnPlayStart.setVisibility(View.INVISIBLE);
+				
+				//播放音乐
+				MyPlayer.playSong(MainActivity.this, mCurretSong.getSongFileName());
 			}
 		}
 	}
@@ -281,6 +287,9 @@ public class MainActivity extends Activity implements IWordButtonClickListener {
 	protected void onPause() {
 		super.onPause();
 		mViewPan.clearAnimation();
+		
+		//停止音乐
+		MyPlayer.stopTheSong(MainActivity.this);
 	}
 
 	/**
@@ -323,11 +332,15 @@ public class MainActivity extends Activity implements IWordButtonClickListener {
 		if (mCurrentStageView != null) {
 			mCurrentStageView.setText((mCurrentStageIndex + 1) + "");
 		}
+		
 
 		// 获得数据
 		mAllWords = initAllWord();
 		// 更新数据
 		mMyGridView.updateData(mAllWords);
+		
+		//一开始播放音乐
+		handlePlayButton();
 	}
 
 	/**
@@ -586,12 +599,19 @@ public class MainActivity extends Activity implements IWordButtonClickListener {
 	 * 处理过关界面及事件
 	 */
 	private void handlePassEvent() {
+		//显示过关界面
 		mPassView = (LinearLayout) this.findViewById(R.id.pass_view);
 		mPassView.setVisibility(View.VISIBLE);
 
 		// 停止未完成的动画
 		mViewPan.clearAnimation();
-
+		
+		//停止音乐
+		MyPlayer.stopTheSong(MainActivity.this);
+		
+		//播放音效
+		MyPlayer.playTone(MainActivity.this, MyPlayer.INDEX_STONE_COIN);
+		
 		// 显示当前关的索引
 		mCurrentStagePassView = (TextView) findViewById(R.id.text_current_stage_pass);
 		if (mCurrentStagePassView != null) {
@@ -603,13 +623,14 @@ public class MainActivity extends Activity implements IWordButtonClickListener {
 		if (mCurrentSongNamePassView != null) {
 			mCurrentSongNamePassView.setText(mCurretSong.getSongName());
 		}
-
+		
 		// 下一关按键处理
 		ImageButton btnPass = (ImageButton) findViewById(R.id.btn_next);
 		btnPass.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
+			
 				// 判断是否通关
 				if (judeAppPassed()) {
 					// 进入通关界面

@@ -2,6 +2,7 @@ package com.example.guessmusic.util;
 
 import com.example.guessmusic.R;
 import com.example.guessmusic.model.IAlertDialogButtonListener;
+import com.example.guessmusic.ui.MainActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -47,7 +48,7 @@ public class Util {
 	 * @param message
 	 * @param listaner
 	 */
-	public static void showDialog(Context context, String message,
+	public static void showDialog(final Context context, String message,
 			final IAlertDialogButtonListener listaner) {
 
 		View dialogView = null;
@@ -76,6 +77,9 @@ public class Util {
 				if(listaner != null){
 					listaner.onClick();
 				}
+				
+				//播放音效
+				MyPlayer.playTone(context, MyPlayer.INDEX_STONE_ENTER);
 			}
 		});
 
@@ -87,6 +91,9 @@ public class Util {
 				if(mAlertDialog != null){
 					mAlertDialog.cancel();
 				}
+				
+				//播放音效
+				MyPlayer.playTone(context, MyPlayer.INDEX_STONE_CANCEL);
 			}
 		});
 		

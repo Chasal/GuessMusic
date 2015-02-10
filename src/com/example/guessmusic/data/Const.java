@@ -3,7 +3,6 @@ package com.example.guessmusic.data;
 /**
  * 歌曲与歌曲名的对应关系
  * @author Administrator
- *
  */
 public class Const {
 	
