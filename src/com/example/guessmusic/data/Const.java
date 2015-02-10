@@ -25,4 +25,32 @@ public class Const {
         {"__00009.m4a", "老男孩"},
         {"__00010.m4a", "龙的传人"}
 	};
+	
+	//游戏数据保存文件
+	public static final String FILE_NAME_SAVE_DATA = "Data.dat";
+	
+	public static final int INDEX_LOAD_DATA_STAGE = 0;
+	
+	public static final int INDEX_LOAD_DATA_COINS = 1;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
